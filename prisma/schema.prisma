@@ -88,3 +88,9 @@ model postbl {
   MerchantId         String?   @db.VarChar(200)
   ApiKey             String?   @db.VarChar(200)
 }
+
+model User {
+  id       Int     @id @default(autoincrement())  // Primary key
+  username String  @unique                       // Marked as unique
+  password String
+}
