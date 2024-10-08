@@ -125,4 +125,69 @@ router.post('/Update', async(req, res) => {
         });
     }})
 
+router.post('/Delete', async(req, res) => {
+    try {
+        const { id } = req.body;
+        const UserId = parseInt(req.headers['user-id'], 10) || 1;
+
+        // Validate UserId
+        if (UserId <= 0) {
+            return res.status(400).json({
+                isresponse: false,
+                responsestatus: 'Invalid User ID',
+                errorcode: 'Invalid User ID',
+                suberrorcode: 400,
+                errormsg: 'Invalid User ID' 
+            });
+        }
+
+        // Validate the campaign ID to be deleted
+        if (id <= 0) {
+            return res.status(400).json({
+                isresponse: false,
+                responsestatus: 'Invalid ID',
+                errorcode: 'Invalid ID',
+                suberrorcode: 400,
+                errormsg: 'Invalid ID'
+            });
+        }
+
+        const data = await prisma.campaigntbl.findUnique({where: {Id: BigInt(id)}})
+
+        if (!data) {
+            return res.status(404).json({
+                isresponse: false,
+                responsestatus: 'Invalid ID',
+                errorcode: 'Invalid ID',
+                suberrorcode: 404,
+                errormsg: 'Invalid ID'
+            });
+        }
+
+        // Perform the delete operation using Prisma
+        const deleteResult = await prisma.campaigntbl.delete({
+            where: { Id: data.Id }
+        });
+
+        // Return a success response
+        return res.json({
+            isresponse: true,
+            responsestatus: 'Success',
+            errorcode: null,
+            suberrorcode: 0,
+            errormsg: 'Campaign deleted successfully'
+        });
+    } catch (error) {
+        // Log the error and return a 500 response
+        // AppLogger.error('ECC_578', 'Error message', 'fullPath', 'namespace', 'className', 'methodName', error);
+        return res.status(500).json({
+            isresponse: false,
+            responsestatus: 'Error',
+            errorcode: 'ECC_578',
+            suberrorcode: 500,
+            errormsg: 'Internal Server Error'
+        });
+    }
+})
+
 module.exports = router;
