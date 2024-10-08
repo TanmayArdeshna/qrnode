@@ -31,4 +31,3 @@ const startApp = async () => {
 };
 
 startApp();
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
