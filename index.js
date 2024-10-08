@@ -7,8 +7,7 @@ require('dotenv').config();
 
 const userController = require('./src/Controller/userController');
 const POSOperationConrtroller = require('./src/Controller/POSOperationController');
-const userController = require('./src/Controller/userController'); // Import the controller
-const campaignController = require('./src/Controller/campaignController'
+const campaignController = require('./src/Controller/campaignController');
 
 // Middleware
 app.use(bodyParser.json());
