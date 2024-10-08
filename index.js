@@ -4,8 +4,11 @@ const prisma = require('./prisma/client');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+
+const userController = require('./src/Controller/userController');
+const POSOperationConrtroller = require('./src/Controller/POSOperationController');
 const userController = require('./src/Controller/userController'); // Import the controller
-const campaignController = require('./src/Controller/campaignController')
+const campaignController = require('./src/Controller/campaignController'
 
 // Middleware
 app.use(bodyParser.json());
@@ -13,6 +16,7 @@ app.use(cors({ origin: '*' })); // Allow all origins for testing purposes
 
 // Use the userController routes
 app.use('/api/UserOperation', userController);
+app.use('/api/POSOperation', POSOperationConrtroller);
 app.use('/api/CampaignOperation', campaignController);
 
 // Start the server and check the Prisma client connection
