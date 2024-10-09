@@ -14,9 +14,9 @@ router.post('/Insert', async (req, res) => {
         model.CreatedBy = "User";
         model.Ip = req.ip;
         model.Source = "web";
-        
-        // Extract UserId from the request headers
-        model.UserId = parseInt(req.headers['user-id'], 10);
+
+        // Handle both 'UserId' and 'userid' by normalizing the header lookup to lowercase
+        model.UserId = parseInt(req.headers['userid'] || req.headers['UserId'], 10);
 
         // Validate UserId
         if (isNaN(model.UserId) || model.UserId <= 0) {
@@ -32,7 +32,7 @@ router.post('/Insert', async (req, res) => {
         // Insert data directly using Prisma
         const insertResult = await prisma.postbl.create({
             data: {
-                UserId: model.UserId,
+                UserId: model.UserId,  // Refers to 'UserId' in your MySQL table
                 PosName: model.posname,
                 Active: model.active,
                 Remark: model.remark,
@@ -45,7 +45,7 @@ router.post('/Insert', async (req, res) => {
             }
         });
 
-        // Return the inserted record (BigInt fields will be automatically serialized as strings)
+        // Return the inserted record
         res.json(insertResult);
     } catch (error) {
         console.error("Error during insertion:", error);
@@ -60,13 +60,16 @@ router.post('/Insert', async (req, res) => {
 });
 
 
+
+
+
 router.post('/Update', async (req, res) => {
     try {
         const model = req.body;
         model.ModifiedBy = "User";
         model.Ip = req.ip;
         model.Source = "web";
-        model.UserId = parseInt(req.headers['user-id'], 10);
+        model.UserId = parseInt(req.headers['userid'] || req.headers['UserId'], 10);
 
         // Validate UserId
         if (isNaN(model.UserId) || model.UserId <= 0) {
